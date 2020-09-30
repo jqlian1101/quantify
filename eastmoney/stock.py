@@ -1,3 +1,8 @@
+# -*- coding:UTF-8 -*-
+
+# 数据来源
+# http://quote.eastmoney.com/center/gridlist.html#hs_a_board
+
 import re
 import os
 import requests
@@ -7,7 +12,7 @@ import json
 import math
 import time
 
-# http://quote.eastmoney.com/center/gridlist.html#hs_a_board
+
 
 class EastMoney:
 
@@ -36,7 +41,9 @@ class EastMoney:
         return response
 
 
+
     def fetch(self, page):
+        print('page : ', page)
         url = self.get_url(page)
 
         html_doc = self.get_html(url)
@@ -62,19 +69,23 @@ class EastMoney:
 
         row = self.writeBefore(stockList)
 
-        if os.path.isfile(file):
-            # 如果文件存在，直接写入
-            with open(file, 'a+', encoding='utf8') as f:
-                writer = csv.writer(f)
-                writer.writerows(row)
+        with open(file, 'a+', encoding='utf8') as f:
+            writer = csv.writer(f)
+            writer.writerows(row)
 
-        else:
-            # 如果文件不存在，则添加header row
-            header = ['code','name']
-            with open(file, 'a+', encoding='utf8') as f:
-                writer = csv.writer(f)
-                writer.writerow(header)
-                writer.writerows(row)
+        # if os.path.isfile(file):
+        #     # 如果文件存在，直接写入
+        #     with open(file, 'a+', encoding='utf8') as f:
+        #         writer = csv.writer(f)
+        #         writer.writerows(row)
+
+        # else:
+        #     # 如果文件不存在，则添加header row
+        #     header = ['code','name']
+        #     with open(file, 'a+', encoding='utf8') as f:
+        #         writer = csv.writer(f)
+        #         writer.writerow(header)
+        #         writer.writerows(row)
 
 
     def analytic_data(self,data_str):
@@ -107,6 +118,7 @@ class EastMoney:
 
         total_page = math.ceil(total / self.page_size)
 
+        print('total_page : ', total_page)
         self.total_page = total_page
 
 
@@ -120,10 +132,9 @@ class EastMoney:
 
             file_path = os.path.abspath(__file__)
             file_name = file_path.split('/')
-            print(file_name)
 
             self.writeCSV(stockList, file_name[-1] + '.csv')
-            time.sleep(100)     # 休眠100秒
+            time.sleep(20)     # 休眠n秒
 
 
 
