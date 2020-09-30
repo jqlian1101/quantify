@@ -6,7 +6,6 @@ import csv
 import time
 import random
 from lxml import etree
-import pandas as pd
 
 proxyList =[
     '115.221.247.208:9999',
@@ -123,7 +122,7 @@ class Download_HistoryStock(object):
             if chunk:
                 f.write(chunk)
 
-        print('股票---', self.code, '历史数据下载完成')
+        print(self.code + ' 历史数据下载完成')
 
 
     def run(self):
@@ -141,7 +140,7 @@ class Download_HistoryStock(object):
 
             pwd = os.path.split(os.path.realpath(__file__))[0]
             save_path = pwd + '/files/'
-            with open(save_path + '/error.csv', 'a+') as f:
+            with open(save_path + 'c', 'a+') as f:
                 csv_write = csv.writer(f)
                 csv_write.writerow([self.code])
 
@@ -150,6 +149,8 @@ def start():
 
     pwd = os.path.split(os.path.realpath(__file__))[0]
     save_path = pwd + '/files/history/'
+
+    # os.remove(pwd + '/files/error.csv')
 
     # 如果目标文件夹不存在，则新建
     if not os.path.exists(save_path):
