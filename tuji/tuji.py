@@ -44,7 +44,7 @@ def get_headers():
 
 
 def gethtml(url):  # 获取网页源码
-    time.sleep(5)
+    time.sleep(3)
 
     r = requests.get(url, headers=get_headers())
     r.encoding = 'utf-8'
