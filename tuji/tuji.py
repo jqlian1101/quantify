@@ -7,12 +7,15 @@ import os
 import random
 import time
 import json
+import sys
 
 
 userAgent = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:77.0) Gecko/20100101 Firefox/77.0',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36',
 ]
+
+default_start_page = 1
 
 
 def get_idx(max_num):
@@ -72,7 +75,7 @@ def downPic(url, savepath):  # 下载图片
     isExists = os.path.exists(file_path)
 
     if not isExists:
-        picdata = requests.get(url, headers=get_headers())
+        picdata = requests.get(url, headers=get_headers(), timeout = 20)
         with open(file_path, mode='wb') as file:
             file.write(picdata.content)
 
@@ -273,7 +276,13 @@ def download_imgs(page_url, folder_path):
 
 
 def get_list_page(url, total_list_page):
-    for i in range(total_list_page):
+    _start = start_page
+    _list = range(total_list_page)
+
+    if _start != default_start_page:
+        _list = range(start_page - 1, total_list_page)
+
+    for i in _list:
         page_idx = i + 1
         page_url = url + str(page_idx) + '.html'
 
@@ -333,10 +342,16 @@ def start(urls):
 
 
 if __name__ == '__main__':
+    start_page = default_start_page
+    if len(sys.argv) > 1:
+        argv = sys.argv[1]
+        start_page = int(argv)
+
+
     urls = [
         'https://www.tujigu.com/zhongguo/',
-        'https://www.tujigu.com/hanguo/',
-        "https://www.tujigu.com/riben/",
+        # 'https://www.tujigu.com/hanguo/',
+        # "https://www.tujigu.com/riben/",
 
     ]
     start(urls)
