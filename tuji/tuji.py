@@ -17,6 +17,8 @@ userAgent = [
 
 default_start_page = 1
 
+is_init = True
+
 
 def get_idx(max_num):
     num = random.randint(0, max_num)
@@ -47,7 +49,7 @@ def get_headers():
 
 
 def gethtml(url):  # 获取网页源码
-    time.sleep(3)
+    # time.sleep(3)
 
     r = requests.get(url, headers=get_headers())
     r.encoding = 'utf-8'
@@ -75,7 +77,7 @@ def downPic(url, savepath):  # 下载图片
     isExists = os.path.exists(file_path)
 
     if not isExists:
-        picdata = requests.get(url, headers=get_headers(), timeout = 20)
+        picdata = requests.get(url, headers=get_headers(), timeout = 30)
         with open(file_path, mode='wb') as file:
             file.write(picdata.content)
 
@@ -274,13 +276,29 @@ def download_imgs(page_url, folder_path):
 
     return detail
 
+def get_start_index():
+    # 从第几页开始下载
+    start_page = default_start_page
+    # 从第start_page页第第几套开始下载
+    start_idx = 1
+    if len(sys.argv) > 1:
+        argv = sys.argv[1]
+        argv = argv.split(',')
 
-def get_list_page(url, total_list_page):
-    _start = start_page
+        start_page = int(argv[0])
+        start_idx = int(argv[1])
+
+    return start_page, start_idx
+
+
+def get_list_page(url, total_list_page, _start_page, _start_idx):
+    global is_init
+
+    _start = _start_page
     _list = range(total_list_page)
 
     if _start != default_start_page:
-        _list = range(start_page - 1, total_list_page)
+        _list = range(_start_page - 1, total_list_page)
 
     for i in _list:
         page_idx = i + 1
@@ -296,7 +314,19 @@ def get_list_page(url, total_list_page):
 
         cur_page_atlas = page_info['cur_page_atlas']
 
-        for altas in cur_page_atlas:
+
+        # 只有第一页从start_idx开始爬取
+        # 其他从当前页第一套图集开始爬取
+        if not is_init:
+            _start_idx = 1
+        else:
+            is_init = False
+
+        total_altas_num = len(cur_page_atlas)
+        for i in range(_start_idx, total_altas_num):
+            altas = cur_page_atlas[i]
+            print('第%d页 第%d套(共%d套) 下载中。。。' %(page_idx, i, total_altas_num))
+
             # 创建文件夹
             desc = altas['title']['desc']
             folder_path = mkdir(desc)
@@ -332,29 +362,26 @@ def get_list_page(url, total_list_page):
                       (cur_page, total_page))
 
 
-def start(urls):
+def start(urls, _start_page, _start_idx):
     for url in urls:
         html = gethtml(url)
         cur_url_info = analysis_list_page(html)
 
         total_page = cur_url_info['total_page']
-        get_list_page(url, total_page)
+
+        get_list_page(url, total_page, _start_page, _start_idx)
 
 
 if __name__ == '__main__':
-    start_page = default_start_page
-    if len(sys.argv) > 1:
-        argv = sys.argv[1]
-        start_page = int(argv)
-
-
     urls = [
         'https://www.tujigu.com/zhongguo/',
         # 'https://www.tujigu.com/hanguo/',
         # "https://www.tujigu.com/riben/",
 
     ]
-    start(urls)
+
+    _start_page, _start_idx = get_start_index()
+    start(urls, _start_page, _start_idx)
 
     # pwd = os.path.split(os.path.realpath(__file__))[0]
     # save_path = pwd + '/files/'

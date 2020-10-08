@@ -205,6 +205,8 @@ def get_unfinished():
     for i in finished_arr:
         all_arr.remove(i)
 
+    print(all_arr)
+
     for code in all_arr:
         download_file(code, save_path)
 
