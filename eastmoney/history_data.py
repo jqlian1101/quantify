@@ -211,7 +211,7 @@ if __name__ == '__main__':
 
     source_path = pwd + '/files/stock.py.csv'
 
-    start(err_path)
-    # start(source_path)
+    # start(err_path)
+    start(source_path)
 
     # get_unfinished()

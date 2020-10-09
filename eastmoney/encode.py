@@ -5,7 +5,6 @@ import pandas as pd
 import os
 import csv
 
-
 # 日期，股票代码，名称，收盘价，最高价，最低价，开盘价，前收盘价，涨跌额，涨跌幅，换手率，成交量，成交额，总市值，流通市值
 str = 'date,code,name,close,high,low,open,preclose,chg,pctChg,turn,volume,amount,tcap,mcap'
 header_list = str.split(',')
@@ -38,7 +37,7 @@ for i, j, k in files:
         handle_file(item)
 
 
-# 处理异常股票
+# # TODO 处理异常股票
 # with open(cwdpath + '/err.csv', 'r+', newline='') as f:
 #     reader = csv.reader(f)
 
@@ -48,12 +47,12 @@ for i, j, k in files:
 #         handle_file(item[0] + '.csv')
 
 
-
 # 保存异常文件列表
 err_path = cwdpath + '/err.csv'
 
-# # err_file = pd.DataFrame(columns=['code'], data=err_list, index=None)
-# # err_file.to_csv(cwdpath + 'err.csv', encoding='utf-8')
+# TODO pandas实现
+# err_file = pd.DataFrame(columns=['code'], data=err_list, index=None)
+# err_file.to_csv(cwdpath + 'err.csv', encoding='utf-8')
 
 
 with open(cwdpath + '/err2.csv', 'w+', newline='') as f:
