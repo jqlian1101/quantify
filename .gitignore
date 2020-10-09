@@ -4,9 +4,11 @@
 .DS_Store
 
 # vscode
+.vscode
 .history
 
 */history
 */files
+files
 
 *.log

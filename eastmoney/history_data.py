@@ -7,13 +7,13 @@ import time
 import random
 from lxml import etree
 
-proxyList = [
-    '115.221.247.208:9999',
-    '112.111.217.165:9999',
-    '61.130.181.231:20195',
-    '125.110.69.229:9000',
-    '123.163.27.150:9999',
-]
+# proxyList = [
+#     '115.221.247.208:9999',
+#     '112.111.217.165:9999',
+#     '61.130.181.231:20195',
+#     '125.110.69.229:9000',
+#     '123.163.27.150:9999',
+# ]
 
 userAgent = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:77.0) Gecko/20100101 Firefox/77.0',
@@ -33,20 +33,20 @@ def get_idx(max_num):
     return idx
 
 
-def get_proxy():
-    """
-    随机获取代理ip
-    """
-    max_num = len(proxyList)
-    idx = get_idx(max_num)
+# def get_proxy():
+#     """
+#     随机获取代理ip
+#     """
+#     max_num = len(proxyList)
+#     idx = get_idx(max_num)
 
-    proxy = proxyList[idx]
-    proxies = {
-        "http": "http://%(proxy)s/" % {'proxy': proxy},
-        "https": "http://%(proxy)s/" % {'proxy': proxy}
-    }
+#     proxy = proxyList[idx]
+#     proxies = {
+#         "http": "http://%(proxy)s/" % {'proxy': proxy},
+#         "https": "http://%(proxy)s/" % {'proxy': proxy}
+#     }
 
-    return proxies
+#     return proxies
 
 
 def get_user_agent():
@@ -85,7 +85,7 @@ class Download_HistoryStock(object):
         self.headers = {
             'User-Agent': get_user_agent()
         }
-        self.proxies = get_proxy()
+        # self.proxies = get_proxy()
 
     def parse_url(self):
         # response = requests.get(self.url, headers = self.headers, proxies= self.proxies)
@@ -136,7 +136,7 @@ class Download_HistoryStock(object):
 
         except Exception as e:
             print('error : ', e)
-            print(html)
+            # print(html)
 
             pwd = os.path.split(os.path.realpath(__file__))[0]
             save_path = pwd + '/files/'
@@ -146,15 +146,15 @@ class Download_HistoryStock(object):
 
 
 def download_file(code, save_path):
-    save_name = save_path + code + '.csv'
+    # save_name = save_path + code + '.csv'
 
-    if not os.path.exists(save_name):
-        download = Download_HistoryStock(code, save_path)
-        download.run()
-        time.sleep(10)
+    # if not os.path.exists(save_name):
+    download = Download_HistoryStock(code, save_path)
+    download.run()
+    time.sleep(10)
 
 
-def start():
+def start(source_path):
 
     pwd = os.path.split(os.path.realpath(__file__))[0]
     save_path = pwd + '/files/history/'
@@ -165,22 +165,13 @@ def start():
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
-    with open(pwd + '/files/stock.py.csv', 'r') as f:
+    with open(source_path, 'r') as f:
         reader = csv.reader(f)
         # reader = list(reader)
 
         for row in reader:
             code = row[0]
             download_file(code, save_path)
-
-            # save_name = save_path + code + '.csv'
-
-            # print(save_name + ' is have : ', os.path.exists(save_name))
-
-            # if not os.path.exists(save_name):
-            #     download = Download_HistoryStock(code, save_path)
-            #     download.run()
-            #     time.sleep(10)
 
 
 def get_unfinished():
@@ -213,6 +204,14 @@ def get_unfinished():
 
 if __name__ == '__main__':
 
-    # start()
+    pwd = os.path.split(os.path.realpath(__file__))[0]
+    cwdpath = os.path.abspath(os.path.dirname(pwd))
 
-    get_unfinished()
+    err_path = cwdpath + '/err.csv'
+
+    source_path = pwd + '/files/stock.py.csv'
+
+    start(err_path)
+    # start(source_path)
+
+    # get_unfinished()
