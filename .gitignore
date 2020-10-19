@@ -3,6 +3,11 @@
 # misc
 .DS_Store
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
 # vscode
 .vscode
 .history
@@ -12,3 +17,6 @@
 files
 
 *.log
+
+
+.ipynb_checkpoints
