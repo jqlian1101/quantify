@@ -37,10 +37,12 @@ graph_KDJ = fig.add_subplot(gs[3,:])        # kdj
 
 data_len = len(df.index)
 
-# 创建k线图
+# ------------------------------------------
+# ------------------ k线图 ------------------
 mpf.candlestick2_ochl(graph_KAV, df.open, df.close, df.high, df.low, width=0.5, colorup='r', colordown='g')
 
-# 绘制均线
+# -----------------------------------------
+# ------------------ 均线 ------------------
 for index in range(len(ma_list)):
     cur_ma = ma_list[index]
     graph_KAV.plot(np.arange(0, data_len), df['ma%d'%cur_ma], ma_line_color[index], label='MA%d'%cur_ma, lw=1.0)
@@ -50,14 +52,30 @@ graph_KAV.set_title(u"600000 日K线")
 graph_KAV.set_ylabel(u"价格")
 graph_KAV.set_xlim(0, data_len)  # 设置一下x轴的范围
 
-
-# 绘制成交量
+# -------------------------------------------
+# ------------------ 成交量 ------------------
 graph_VOL.bar(np.arange(0, data_len), df.volume, color=['g' if df.open[x] > df.close[x] else 'r' for x in range(0, data_len) ])
 graph_VOL.set_ylabel(u"成交量")
 graph_VOL.set_xticks(range(0, data_len), 15)    # x轴范围，每15天标一个日期
 
-# MACD
+# ------------------------------------------
+# ------------------ MACD ------------------
 macd_dif, macd_dea, macd_bar = talib.MACD(df['close'].values, fastperiod=12, slowperiod=26, signalperiod=9)
+# dif dea
+graph_MACD.plot(np.arange(0, data_len), macd_dif, 'red', label="MACD DIF")
+graph_MACD.plot(np.arange(0, data_len), macd_dea, 'blue', label="MACD DEA")
 
+# bar
+bar_red = np.where(macd_bar > 0, 2 * macd_bar, 0)
+bar_green = np.where(macd_bar < 0, 2 * macd_bar, 0)
+graph_MACD.bar(np.arange(0, data_len), bar_red, facecolor='red')
+graph_MACD.bar(np.arange(0, data_len), bar_green, facecolor='green')
+
+graph_MACD.legend(loc="best", fontsize='10')
+graph_MACD.set_ylabel(u"MACD")
+graph_MACD.set_xticks(range(0, data_len), 15)    # x轴范围，每15天标一个日期
+
+# -----------------------------------------
+# ------------------ KDJ ------------------
 
 # plt.show()
