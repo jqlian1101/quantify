@@ -77,5 +77,32 @@ graph_MACD.set_xticks(range(0, data_len), 15)    # x轴范围，每15天标一�
 
 # -----------------------------------------
 # ------------------ KDJ ------------------
+df['K'], df['D'] = talib.STOCH(df.high.values, df.low.values, df.close.values, fastk_period=9, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)
+df['J'] = 3 * df['K'] - 2 * df['D']
 
-# plt.show()
+graph_KDJ.plot(np.arange(0, data_len), df['K'], 'blue', label="K")
+graph_KDJ.plot(np.arange(0, data_len), df['D'], 'g--', label="D")
+graph_KDJ.plot(np.arange(0, data_len), df['J'], 'r--', label="J")
+
+graph_KDJ.set_ylabel(u"KDJ")
+graph_KDJ.set_xlabel('日期')
+graph_KDJ.set_xlim(0, len(df.index))
+graph_KDJ.set_xticks(range(0, len(df.index), 15))    # x轴范围，每15天标一个日期
+graph_KDJ.set_xticklabels([df.index.strftime('%Y-%m-%d')[index] for index in graph_KDJ.get_xticks()])  # 标签设置为日期
+
+
+# X-轴每个ticker标签都向右倾斜45度
+for label in graph_KAV.xaxis.get_ticklabels():
+    label.set_visible(False)
+
+for label in graph_VOL.xaxis.get_ticklabels():
+    label.set_visible(False)
+
+for label in graph_MACD.xaxis.get_ticklabels():
+    label.set_visible(False)
+
+for label in graph_KDJ.xaxis.get_ticklabels():
+    label.set_rotation(45)
+    label.set_fontsize(10)  # 设置标签字体
+
+plt.show()
