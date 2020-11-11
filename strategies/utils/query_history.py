@@ -8,16 +8,16 @@ from numpy.lib.function_base import delete
 import pandas as pd
 import os
 
-
+default_bs_cols = ["date","code","open","high","low","close","preclose","volume","amount","adjustflag","turn","tradestatus","pctChg","isST"]
 
 class QueryHistory:
-    def __init__(self, code, date, frequency='d', adjustflag='3'):
+    def __init__(self, code, date, cols=default_bs_cols, frequency='d', adjustflag='3'):
         self.code = code                # 要查询的股票代码
         self.start_date = date[0]       # 开始时间
         self.end_date = date[1]         # 结束时间
         self.frequency = frequency      # 数据类型，默认为d，日k线；d=日k线、w=周、m=月、5=5分钟、15=15分钟、30=30分钟、60=60分钟k线数据，不区分大小写；指数没有分钟线数据；周线每周最后一个交易日才可以获取，月线每月最后一个交易日才可以获取。
         self.adjustflag = adjustflag    # 复权类型，默认不复权：3；1：后复权；2：前复权。已支持分钟线、日线、周线、月线前后复权。
-        self.bs_cols=["date","code","open","high","low","close","preclose","volume","amount","adjustflag","turn","tradestatus","pctChg","isST"]
+        self.bs_cols = cols
 
     def query_from_bs(self):
         bs.login()
