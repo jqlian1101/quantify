@@ -13,7 +13,7 @@
 
 import talib
 
-from utils import query_history
+from common import query_history
 
 # history_data = query_history.QueryHistory('sh.600000', ('2019-1-1', '2020-1-1'))
 # stockdata = history_data.query_from_bs()

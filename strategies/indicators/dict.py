@@ -1,7 +1,3 @@
-from utils.get_hist_local import get_hist_data
-import stockstats
-import pandas as pd
-
 # 配置数据
 indicators_dic = [{
     "title": "1，交易量delta指标分析",
@@ -42,7 +38,7 @@ indicators_dic = [{
     "desc": """
             https://wiki.mbalib.com/wiki/%E9%9A%8F%E6%9C%BA%E6%8C%87%E6%A0%87
             随机指标(KDJ)一般是根据统计学的原理，通过一个特定的周期（常为9日、9周等）内出现过的最高价、最低价及最后一个计算周期的收盘价及这三者之间的比例关系，来计算最后一个计算周期的未成熟随机值RSV，然后根据平滑移动平均线的方法来计算K值、D值与J值，并绘成曲线图来研判股票走势。
-            （3）在使用中，常有J线的指标，即3乘以K值减2乘以D值（3K－2D＝J），其目的是求出K值与D值的最大乖离程度，以领先KD值找出底部和头部。J大于100时为超买，小于10时为超卖。
+            在使用中，常有J线的指标，即3乘以K值减2乘以D值（3K－2D＝J），其目的是求出K值与D值的最大乖离程度，以领先KD值找出底部和头部。J大于100时为超买，小于10时为超卖。
         """,
     "dic": ["close", "kdjk", "kdjd", "kdjj"]
 }, {
@@ -178,36 +174,3 @@ indicators_dic = [{
         """,
     "dic": ["close", "vr", "vr_6_sma"]
 }]
-
-stock_column = [
-    'adx', 'adxr', 'boll', 'boll_lb', 'boll_ub', 'cci', 'cci_20', 'close_-1_r',
-    'close_-2_r', 'cr', 'cr-ma1', 'cr-ma2', 'cr-ma3', 'dma', 'dx', 'kdjd',
-    'kdjj', 'kdjk', 'macd', 'macdh', 'macds', 'mdi', 'pdi', 'rsi_12', 'rsi_6',
-    'trix', 'trix_9_sma', 'vr', 'vr_6_sma', 'wr_10', 'wr_6'
-]
-
-
-def guess_indicators(df, column=stock_column):
-    # 先按日期进行排序：2020-01-01 ～ 2020-12-30
-    stock = df.sort_index(0)
-
-    stockStat = stockstats.StockDataFrame.retype(stock)
-
-    # 获取指标值
-    stats = stockStat[column]
-
-    # 将指标合并到原始数据
-    data_new = pd.merge(df, stats, on=['date'], how='left')
-    data_new = data_new.round(4)  # 数据保留4位小数
-
-    return data_new
-
-
-if __name__ == '__main__':
-    df = get_hist_data('000001')
-    stock = guess_indicators(df)
-
-    print(stock)
-
-    stock.to_csv('./output/indicators.csv', index=False,
-                 encoding="utf_8_sig")  # utf_8_sig 解决导出时中文乱码
