@@ -19,7 +19,7 @@ stock_column = [
 
 def guess_indicators(df, column=stock_column):
     # 先按日期进行排序：2020-01-01 ～ 2020-12-30
-    stock = df.sort_index(0)
+    stock = df.sort_index(axis=0)
 
     stockStat = stockstats.StockDataFrame.retype(stock)
 

@@ -23,12 +23,8 @@ def get_hist_data(code):
 
     df = pd.read_csv(history_dir, encoding="utf-8", index_col=0)
 
-    df.rename(columns={
-        'ts_code': 'code',
-        'trade_date': 'date',
-        'vol': 'volume'
-    },
-              inplace=True)
+    cols = {'ts_code': 'code', 'trade_date': 'date', 'vol': 'volume'}
+    df.rename(columns=cols, inplace=True)
 
     df.insert(2, 'trade', df['close'])
 
