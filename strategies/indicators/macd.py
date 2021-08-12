@@ -19,5 +19,8 @@ if '__main__' == __name__:
     stock = get_signal(df)
 
     print(stock)
-    stock.to_csv('./output/macd.csv',
-                 encoding="utf_8_sig")  # utf_8_sig 解决导出时中文乱码
+
+    output_stock = stock[['close', "macd", "macds", "macdh"]]
+
+    output_stock.to_csv('./output/macd.csv',
+                        encoding="utf_8_sig")  # utf_8_sig 解决导出时中文乱码
