@@ -2,7 +2,7 @@ from guess_indicators import guess_indicators
 from common.get_hist_local import get_hist_data
 
 # macd  DIF：12天平均和26天平均的差
-# macds Signal macd9天均值
+# macds Signal: macd 9天均值
 # macdh Histogram (柱): 计算macd与signal的差值
 stock_column = ["macd", "macds", "macdh"]
 
@@ -15,12 +15,15 @@ def get_signal(df):
 
 if '__main__' == __name__:
     df = get_hist_data('000001')
+    df = df.sort_index(axis=0)
+    df = df['1991-04-03':]
+    print(df)
 
-    stock = get_signal(df)
+    # stock = get_signal(df)
 
-    print(stock)
+    # print(stock)
 
-    output_stock = stock[['close', "macd", "macds", "macdh"]]
+    # output_stock = stock[['close', "macd", "macds", "macdh"]]
 
-    output_stock.to_csv('./output/macd.csv',
-                        encoding="utf_8_sig")  # utf_8_sig 解决导出时中文乱码
+    # output_stock.to_csv('./output/macd.csv',
+    #                     encoding="utf_8_sig")  # utf_8_sig 解决导出时中文乱码
